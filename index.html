@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .question-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffd1dc 0%, #ffb6c8 50%, #ff9eb5 100%);
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .question-page.hidden {
+            display: none;
+        }
+
+        .heart-bg {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0;
+            animation: float-up 15s infinite ease-in-out;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart-bg:nth-child(1) { left: 5%; animation-delay: -9s; animation-duration: 18s; }
+        .heart-bg:nth-child(2) { left: 15%; animation-delay: -12s; animation-duration: 15s; }
+        .heart-bg:nth-child(3) { left: 25%; animation-delay: -14s; animation-duration: 20s; }
+        .heart-bg:nth-child(4) { left: 35%; animation-delay: -11s; animation-duration: 16s; }
+        .heart-bg:nth-child(5) { left: 45%; animation-delay: -17s; animation-duration: 19s; }
+        .heart-bg:nth-child(6) { left: 55%; animation-delay: -13s; animation-duration: 17s; }
+        .heart-bg:nth-child(7) { left: 65%; animation-delay: -9s; animation-duration: 21s; }
+        .heart-bg:nth-child(8) { left: 75%; animation-delay: -11.5s; animation-duration: 14s; }
+        .heart-bg:nth-child(9) { left: 85%; animation-delay: -10s; animation-duration: 18s; }
+        .heart-bg:nth-child(10) { left: 95%; animation-delay: -14.5s; animation-duration: 16s; }
+        .heart-bg:nth-child(11) { left: 8%; animation-delay: -8.5s; animation-duration: 22s; }
+        .heart-bg:nth-child(12) { left: 18%; animation-delay: -9s; animation-duration: 17s; }
+        .heart-bg:nth-child(13) { left: 28%; animation-delay: -15.5s; animation-duration: 19s; }
+        .heart-bg:nth-child(14) { left: 38%; animation-delay: -8.5s; animation-duration: 15s; }
+        .heart-bg:nth-child(15) { left: 48%; animation-delay: -17.2s; animation-duration: 20s; }
+        .heart-bg:nth-child(16) { left: 58%; animation-delay: -12.5s; animation-duration: 18s; }
+        .heart-bg:nth-child(17) { left: 68%; animation-delay: -8.5s; animation-duration: 16s; }
+        .heart-bg:nth-child(18) { left: 78%; animation-delay: -18.2s; animation-duration: 21s; }
+        .heart-bg:nth-child(19) { left: 88%; animation-delay: -14.2s; animation-duration: 19s; }
+        .heart-bg:nth-child(20) { left: 12%; animation-delay: -10.2s; animation-duration: 17s; }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(255, 105, 135, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: fade-in 0.8s ease-out;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .big-heart {
+            font-size: 80px;
+            animation: heartbeat 1.5s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+            color: #ff4d6d;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            position: relative;
+            min-height: 180px;
+            flex-direction: column;
+        }
+
+        .yes-button-wrapper {
+            position: relative;
+            z-index: 20;
+        }
+
+        .no-button-wrapper {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin-top: 20px;
+        }
+
+        button {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        #yes-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff4d6d 100%);
+            color: white;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 30px rgba(255, 77, 109, 0.6);
+            }
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(255, 77, 109, 0.5);
+        }
+
+        #no-btn {
+            background: linear-gradient(135deg, #e0e0e0 0%, #c4c4c4 100%);
+            color: #666;
+            position: absolute;
+            transition: all 0.15s ease;
+        }
+
+        #no-btn:hover {
+            transform: scale(0.95);
+        }
+
+        .answer-page {
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 50%, #ffd6e0 100%);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-page.active {
+            display: flex;
+            animation: fade-in 1s ease-out;
+        }
+
+        .celebration-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .celebration-heart {
+            position: absolute;
+            font-size: 40px;
+            animation: celebrate 3s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes celebrate {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .answer-box {
+            background: white;
+            border-radius: 30px;
+            padding: 60px 50px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 30px 80px rgba(255, 105, 135, 0.4);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: bounce-in 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.1) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .mega-heart {
+            font-size: 120px;
+            animation: mega-heartbeat 1s infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes mega-heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .answer-box h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 42px;
+            color: #ff1744;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        .answer-box p {
+            font-size: 20px;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .love-message {
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe9ed 100%);
+            border-left: 4px solid #ff4d6d;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            font-style: italic;
+            color: #333;
+        }
+
+        .image-carousel {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            aspect-ratio: 4/3;
+        }
+
+        .carousel-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .carousel-image.active {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .content-box {
+                padding: 40px 30px;
+            }
+
+            button {
+                font-size: 20px;
+                padding: 16px 35px;
+            }
+
+            .big-heart {
+                font-size: 60px;
+            }
+
+            .answer-box h2 {
+                font-size: 32px;
+            }
+
+            .answer-box p {
+                font-size: 18px;
+            }
+
+            .mega-heart {
+                font-size: 90px;
+            }
+
+            .answer-box {
+                padding: 40px 30px;
+            }
+
+            .image-carousel {
+                max-width: 100%;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle-fade 1.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes sparkle-fade {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Question Page -->
+    <div class="question-page" id="questionPage">
+        <!-- Floating hearts background -->
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💝</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💝</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+
+        <div class="content-box">
+            <div class="big-heart">💝</div>
+            <h1>Will you be my Valentine?</h1>
+            <div class="button-container" id="buttonContainer">
+                <div class="yes-button-wrapper">
+                    <button id="yes-btn">Yes! 💕</button>
+                </div>
+                <div class="no-button-wrapper" id="noButtonWrapper">
+                    <button id="no-btn">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answer Page -->
+    <div class="answer-page" id="answerPage">
+        <!-- Floating hearts background -->
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💝</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        <div class="heart-bg">❤️</div>
+        <div class="heart-bg">💗</div>
+        <div class="heart-bg">💝</div>
+        <div class="heart-bg">💕</div>
+        <div class="heart-bg">💖</div>
+        
+        <div class="celebration-hearts" id="celebrationHearts"></div>
+        
+        <div class="answer-box">
+            <div class="mega-heart">💖</div>
+            <h2>Tudtam, hogy igent mondasz! 🎉</h2>
+            <p>Hurrá! ✨</p>
+            <div class="love-message">
+                <div class="image-carousel" id="imageCarousel">
+                    <img src="asd1.jpg" alt="kep" class="carousel-image active">
+                    <img src="asd2.jpg" alt="kep" class="carousel-image">
+                </div>
+                <p>Már alig várom, hogy együtt tölthessük ezt a különleges napot.</p>
+                <p>Szeretlek! ❤️</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const questionPage = document.getElementById('questionPage');
+        const answerPage = document.getElementById('answerPage');
+        const buttonContainer = document.getElementById('buttonContainer');
+        const noButtonWrapper = document.getElementById('noButtonWrapper');
+        const celebrationHearts = document.getElementById('celebrationHearts');
+
+        let currentImageIndex = 0;
+        let carouselInterval;
+
+        function startImageCarousel() {
+            const images = document.querySelectorAll('.carousel-image');
+            
+            carouselInterval = setInterval(() => {
+                images[currentImageIndex].classList.remove('active');
+                
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                
+                images[currentImageIndex].classList.add('active');
+            }, 5000); 
+        }
+
+        function createSparkles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const distance = 30 + Math.random() * 20;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                sparkle.style.setProperty('--tx', tx + 'px');
+                sparkle.style.setProperty('--ty', ty + 'px');
+                
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 1500);
+            }
+        }
+
+        function moveNoButton(event) {
+            const rect = noBtn.getBoundingClientRect();
+            const wrapperRect = noButtonWrapper.getBoundingClientRect();
+            
+            let mouseX, mouseY;
+            
+            if (event.type === 'touchmove' || event.type === 'touchstart') {
+                mouseX = event.touches[0].clientX;
+                mouseY = event.touches[0].clientY;
+            } else {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            }
+            
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+            
+            const distance = Math.sqrt(
+                Math.pow(mouseX - btnCenterX, 2) + 
+                Math.pow(mouseY - btnCenterY, 2)
+            );
+
+            if (distance < 100) {
+                const angle = Math.atan2(btnCenterY - mouseY, btnCenterX - mouseX);
+                const moveDistance = 120;
+                
+                let newX = rect.left - wrapperRect.left + Math.cos(angle) * moveDistance;
+                let newY = rect.top - wrapperRect.top + Math.sin(angle) * moveDistance;
+
+                const maxX = wrapperRect.width - rect.width;
+                const maxY = wrapperRect.height - rect.height;
+                
+                newX = Math.max(0, Math.min(maxX, newX));
+                newY = Math.max(0, Math.min(maxY, newY));
+                
+                noBtn.style.left = newX + 'px';
+                noBtn.style.top = newY + 'px';
+            }
+        }
+
+        document.addEventListener('mousemove', moveNoButton);
+        document.addEventListener('touchmove', moveNoButton, { passive: true });
+        document.addEventListener('touchstart', moveNoButton, { passive: true });
+
+        noBtn.addEventListener('click', (e) => {
+            const rect = noBtn.getBoundingClientRect();
+            const wrapperRect = noButtonWrapper.getBoundingClientRect();
+            
+            const randomX = Math.random() * (wrapperRect.width - rect.width);
+            const randomY = Math.random() * (wrapperRect.height - rect.height);
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            e.preventDefault();
+        });
+
+        yesBtn.addEventListener('click', (e) => {
+            createSparkles(e.clientX, e.clientY);
+            
+            setTimeout(() => {
+                questionPage.classList.add('hidden');
+                answerPage.classList.add('active');
+
+                startImageCarousel();
+
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.className = 'celebration-heart';
+                        heart.textContent = ['💕', '💖', '❤️', '💗', '💝'][Math.floor(Math.random() * 5)];
+                        heart.style.left = Math.random() * 100 + '%';
+                        heart.style.animationDelay = Math.random() * 0.5 + 's';
+                        heart.style.animationDuration = (2 + Math.random() * 2) + 's';
+                        celebrationHearts.appendChild(heart);
+                        
+                        setTimeout(() => heart.remove(), 4000);
+                    }, i * 100);
+                }
+            }, 300);
+        });
+
+        window.addEventListener('load', () => {
+            noBtn.style.position = 'absolute';
+            const wrapperRect = noButtonWrapper.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            noBtn.style.left = ((wrapperRect.width - btnRect.width) / 2) + 'px';
+            noBtn.style.top = '0';
+        });
+    </script>
+</body>
+</html>
